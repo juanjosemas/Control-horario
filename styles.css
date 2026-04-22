@@ -1,0 +1,535 @@
+:root {
+    --primary-color: #2563eb; /* Color azul principal para botones y realces */
+    --secondary-color: #1e40af; /* Azul más oscuro para estados hover o activos */
+    --success-color: #10b981; /* Verde para acciones positivas como fichar entrada */
+    --danger-color: #ef4444; /* Rojo para errores, salidas o borrar */
+    --bg-color: #f3f4f6; /* Gris muy claro para el fondo de la aplicación */
+    --card-bg: #ffffff; /* Blanco puro para tarjetas y contenedores */
+    --text-color: #1f2937; /* Gris casi negro para el texto principal */
+    --text-muted: #6b7280; /* Gris medio para textos secundarios o etiquetas */
+    --sidebar-width: 250px; /* CAMBIO: Reducido a 250px para que sea notablemente más estrecho */
+    --header-height: 60px; /* Altura fija de la cabecera superior */
+}
+
+* { 
+    box-sizing: border-box; /* Incluye el padding y bordes en el ancho total del elemento */
+    margin: 0; /* Elimina los espacios exteriores por defecto de todos los elementos */
+    padding: 0; /* Elimina los espacios interiores por defecto de todos los elementos */
+    font-family: 'Piedra', system-ui, sans-serif; /* Aplica la fuente principal elegida */
+}
+
+body { 
+    background-color: var(--bg-color); /* Aplica el color de fondo definido en las variables */
+    color: var(--text-color); /* Aplica el color de texto principal */
+    height: 100vh; /* Obliga al cuerpo a ocupar todo el alto de la pantalla */
+    overflow: hidden; /* Evita el scroll global para manejarlo internamente en secciones */
+    display: flex; /* Activa el modo de diseño flexible */
+    flex-direction: column; /* Alinea los elementos hijos en columna (Header arriba, Main abajo) */
+    background-size: cover; /* Ajusta la imagen de fondo para cubrir toda la pantalla */
+    background-repeat: no-repeat; /* Evita que la imagen de fondo se duplique */
+    background-position: center; /* Centra la imagen de fondo en la pantalla */
+    background-attachment: fixed; /* Mantiene el fondo fijo al hacer scroll */
+    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.3)), url('img/nubes.jpg'); /* Filtro degradado blanco sobre la imagen de fondo */
+}
+
+.hidden { 
+    display: none !important; /* Oculta elementos de forma forzada ignorando otras reglas */
+}
+
+.btn { 
+    padding: 8px 16px; /* Espacio interno vertical y horizontal del botón */
+    border-radius: 6px; /* Redondea las esquinas del botón */
+    border: none; /* Elimina el borde por defecto */
+    cursor: pointer; /* Cambia el icono del ratón a una mano al pasar por encima */
+    font-weight: 500; /* Hace el texto del botón ligeramente más grueso */
+    transition: 0.2s; /* Define una transición suave para cambios de color o sombra */
+    font-size: 0.9rem; /* Tamaño de fuente del botón */
+}
+
+.btn-primary { 
+    background-color: var(--primary-color); /* Fondo azul principal */
+    color: white; /* Texto en blanco para contraste */
+}
+
+.btn-primary:hover { 
+    background-color: var(--secondary-color); /* Color más oscuro cuando el ratón está encima */
+}
+
+.btn-danger { 
+    background-color: var(--danger-color); /* Fondo rojo */
+    color: white; /* Texto blanco */
+}
+
+.btn-success { 
+    background-color: var(--success-color); /* Fondo verde */
+    color: white; /* Texto blanco */
+}
+
+.btn-sm { 
+    padding: 4px 8px; /* Tamaño reducido para botones pequeños */
+    font-size: 0.8rem; /* Fuente más pequeña para botones compactos */
+}
+
+.icon-btn { 
+    background: none; /* Elimina el fondo por defecto */
+    border: none; /* Elimina el borde por defecto */
+    cursor: pointer; /* Puntero de mano */
+    color: var(--text-muted); /* Color de icono gris suave */
+    transition: color 0.2s; /* Transición suave de color al pasar el ratón */
+    padding: 2px; /* Pequeño espacio para facilitar el clic */
+}
+
+.icon-btn:hover { 
+    color: var(--primary-color); /* El icono se vuelve azul al pasar el ratón */
+}
+
+/* --- Pantalla de Login --- */
+#login-screen {
+    position: fixed; /* Lo fija en la pantalla por encima de todo */
+    top: 0; /* Alinea al borde superior */
+    left: 0; /* Alinea al borde izquierdo */
+    width: 100%; /* Ocupa todo el ancho */
+    height: 100%; /* Ocupa todo el alto */
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); /* Fondo con degradado azul */
+    display: flex; /* Flexbox para centrar la tarjeta */
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente */
+    z-index: 1000; /* Asegura que esté por encima de cualquier otro elemento */
+    background-size: cover; /* Ajusta la imagen de fondo para cubrir toda la pantalla */
+    background-repeat: no-repeat; /* Evita que la imagen de fondo se duplique */
+    background-position: center; /* Centra la imagen de fondo en la pantalla */
+    background-attachment: fixed; /* Mantiene el fondo fijo al hacer scroll */
+    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.3)), url('img/azul.jpg'); /* Filtro degradado blanco sobre la imagen de fondo */
+}
+
+.login-card {
+    background: white; /* Fondo blanco para la tarjeta */
+    padding: 2.5rem; /* Espacio interior generoso */
+    border-radius: 12px; /* Esquinas muy redondeadas */
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); /* Sombra profunda para dar efecto de elevación */
+    width: 100%; /* Ancho responsivo */
+    max-width: 400px; /* No superará los 400px de ancho */
+    text-align: center; /* Centra el texto dentro de la tarjeta */
+}
+
+.login-card h2 { 
+    margin-bottom: 1.5rem; /* Espacio debajo del título */
+    color: var(--text-color); /* Color del título */
+}
+
+.form-group { 
+    margin-bottom: 1rem; /* Separa los bloques de input */
+    text-align: left; /* Los labels quedan alineados a la izquierda */
+}
+
+.form-group label { 
+    display: block; /* El label ocupa toda la línea */
+    margin-bottom: 0.5rem; /* Espacio entre label e input */
+    font-size: 0.9rem; /* Tamaño de fuente del label */
+    color: var(--text-muted); /* Color gris para los labels */
+}
+
+.form-input { 
+    width: 100%; /* El input ocupa todo el ancho disponible */
+    padding: 10px; /* Espacio interno para que el texto no toque los bordes */
+    border: 1px solid #d1d5db; /* Borde gris claro */
+    border-radius: 6px; /* Esquinas redondeadas */
+    outline: none; /* Elimina el borde de enfoque por defecto del navegador */
+    font-size: 0.9rem; /* Tamaño del texto escrito */
+}
+
+.form-input:focus { 
+    border-color: var(--primary-color); /* El borde cambia a azul al hacer clic dentro */
+}
+
+.login-error { 
+    color: var(--danger-color); /* Texto en rojo para el error */
+    font-size: 0.9rem; /* Tamaño de fuente */
+    margin-top: 1rem; /* Espacio superior */
+    display: none; /* Oculto por defecto */
+}
+
+/* --- Cabecera (Header) --- */
+header {
+    height: var(--header-height); /* Altura definida en variables */
+    background-color: var(--card-bg); /* Fondo blanco */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Sombra sutil en la parte inferior */
+    display: flex; /* Flexbox para distribuir elementos */
+    align-items: center; /* Centra verticalmente los elementos */
+    padding: 0 1rem; /* Margen interno a los lados */
+    justify-content: space-between; /* El logo a la izquierda y el usuario a la derecha */
+    z-index: 10; /* Por encima del contenido principal */
+}
+
+.header-left { 
+    display: flex; /* Flexbox para agrupar botón de menú y título */
+    align-items: center; /* Alineación vertical */
+    gap: 1rem; /* Espacio entre botón y título */
+}
+
+.menu-btn { 
+    background: none; /* Sin fondo */
+    border: none; /* Sin bordes */
+    cursor: pointer; /* Puntero de mano */
+    padding: 4px; /* Espacio para clics */
+    color: var(--text-color); /* Color del icono */
+}
+
+.user-info { 
+    font-size: 0.9rem; /* Tamaño de texto para el nombre de usuario */
+    font-weight: 600; /* Texto en negrita */
+    color: var(--text-muted); /* Color gris suave */
+}
+
+.logout-btn { 
+    color: var(--danger-color); /* Rojo para el botón de salir */
+    text-decoration: none; /* Sin subrayado */
+    font-size: 0.9rem; /* Tamaño de texto */
+    cursor: pointer; /* Puntero de mano */
+    border: none; /* Sin bordes */
+    background: none; /* Sin fondo */
+}
+
+/* --- Vista Trabajador --- */
+main { 
+    flex: 1; /* El contenido ocupa todo el espacio restante entre cabecera y pie */
+    display: flex; /* Activa flexbox */
+    flex-direction: column; /* Apila reloj, fecha y botón en columna */
+    justify-content: center; /* Centra verticalmente en la pantalla */
+    align-items: center; /* Centra horizontalmente */
+    padding: 2rem; /* Margen interno */
+    position: relative; /* Para posicionamiento de elementos hijos si fuera necesario */
+    z-index: 1; /* Nivel de profundidad */
+}
+
+.clock-display { 
+    font-size: 4rem; /* Tamaño muy grande para el reloj digital */
+    font-weight: 700; /* Texto en negrita */
+    color: var(--text-color); /* Color del texto */
+    margin-bottom: 0.5rem; /* Espacio debajo del reloj */
+    font-variant-numeric: tabular-nums; /* Evita que los números se muevan al cambiar de segundo */
+}
+
+.date-display { 
+    font-size: 1.2rem; /* Tamaño para la fecha */
+    color: var(--text-muted); /* Color gris para la fecha */
+    margin-bottom: 3rem; /* Espacio grande antes del botón de fichar */
+}
+
+#clock-btn { 
+    font-size: 1.5rem; /* Texto grande en el botón */
+    color: white; /* Texto blanco */
+    padding: 1.5rem 3rem; /* Botón grande con mucho padding lateral */
+    border: none; /* Sin bordes */
+    border-radius: 50px; /* Botón con forma de cápsula */
+    cursor: pointer; /* Puntero de mano */
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); /* Sombra elegante */
+    width: 100%; /* Ocupa todo el ancho disponible en móviles */
+    max-width: 320px; /* No supera los 320px en pantallas grandes */
+    transition: 0.2s; /* Transición para efectos de clic/hover */
+}
+
+.status-badge { 
+    margin-top: 1.5rem; /* Espacio encima de la etiqueta de estado */
+    padding: 0.5rem 1.5rem; /* Espacio interno de la etiqueta */
+    border-radius: 20px; /* Forma redondeada */
+    font-weight: 500; /* Texto ligeramente grueso */
+}
+
+/* --- Panel Admin --- */
+#admin-panel { 
+    width: 100%; /* Ocupa todo el ancho */
+    height: 100%; /* Ocupa todo el alto disponible */
+    padding: 1rem; /* Margen interno */
+    overflow-y: auto; /* Si el contenido es largo, permite scroll vertical */
+}
+
+.admin-header { 
+    display: flex; /* Distribuye título y otros elementos */
+    justify-content: space-between; /* Separa los extremos */
+    align-items: center; /* Centra verticalmente */
+    margin-bottom: 2rem; /* Espacio debajo del encabezado de admin */
+    flex-wrap: wrap; /* En móviles permite que los elementos bajen de línea */
+    gap: 1rem; /* Espacio entre elementos */
+}
+
+.filters { 
+    display: flex; /* Alinea los filtros en fila */
+    gap: 1rem; /* Espacio entre cada filtro */
+    margin-bottom: 1rem; /* Espacio debajo del bloque de filtros */
+    flex-wrap: wrap; /* Permite saltos de línea en pantallas pequeñas */
+    align-items: flex-end; /* Alinea los filtros al fondo para que el botón case con los inputs */
+    background: white; /* Fondo blanco para el bloque de filtros */
+    padding: 1rem; /* Margen interno */
+    border-radius: 8px; /* Esquinas redondeadas */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Sombra muy ligera */
+}
+
+.filter-group { 
+    display: flex; /* Coloca label arriba e input abajo */
+    flex-direction: column; /* Orientación vertical */
+    gap: 4px; /* Espacio entre label e input */
+    flex: 1; /* Intenta que todos los filtros midan lo mismo */
+    min-width: 140px; /* Evita que los filtros se encojan demasiado */
+}
+
+.filter-group label { 
+    font-size: 0.8rem; /* Fuente pequeña para labels secundarios */
+    color: var(--text-muted); /* Gris */
+    font-weight: 600; /* Negrita */
+}
+
+.data-table { 
+    width: 100%; /* Tabla a ancho completo */
+    border-collapse: collapse; /* Elimina espacios dobles entre bordes de celdas */
+    background: white; /* Fondo de tabla blanco */
+    border-radius: 8px; /* Esquinas redondeadas (requiere overflow hidden) */
+    overflow: hidden; /* Corta las esquinas de la tabla para que coincidan con el radio */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Sombra suave */
+    font-size: 0.9rem; /* Tamaño de fuente de los datos */
+}
+
+.data-table th, .data-table td { 
+    padding: 12px 16px; /* Espacio interno de celdas */
+    text-align: left; /* Alinea texto a la izquierda */
+    border-bottom: 1px solid #e5e7eb; /* Línea divisoria entre filas */
+    vertical-align: middle; /* Centrado vertical del contenido */
+    white-space: nowrap; /* Evita que el texto salte de línea dentro de la celda */
+}
+
+.data-table th { 
+    background-color: #f9fafb; /* Fondo gris muy claro para cabeceras */
+    font-weight: 600; /* Negrita */
+    font-size: 0.85rem; /* Fuente un poco más pequeña */
+    color: var(--text-muted); /* Color gris */
+    text-transform: uppercase; /* Fuerza el texto en mayúsculas */
+}
+
+.data-table tr:hover { 
+    background-color: #f9fafb; /* Resalta la fila al pasar el ratón */
+}
+
+.total-cell { 
+    font-weight: bold; /* Tiempo total resaltado en negrita */
+    color: var(--primary-color); /* En color azul principal */
+}
+
+.table-responsive {
+    width: 100%; /* Contenedor a ancho total */
+    overflow-x: auto; /* Habilita scroll horizontal si la tabla no cabe */
+    -webkit-overflow-scrolling: touch; /* Mejora suavidad de scroll en móviles Apple */
+    border-radius: 8px; /* Redondeado del contenedor */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Sombra */
+}
+
+.table-responsive table {
+    min-width: 600px; /* Obliga a la tabla a medir al menos 600px para evitar apretamiento */
+}
+
+/* --- Barra Lateral (Sidebar) --- */
+.sidebar-overlay { 
+    position: fixed; /* Fondo oscuro fijo */
+    top: 0; /* Alineado arriba */
+    left: 0; /* Alineado a la izquierda */
+    width: 100%; /* Todo el ancho de la pantalla */
+    height: 100%; /* Todo el alto de la pantalla */
+    background: rgba(0,0,0,0.5); /* Color negro transparente */
+    z-index: 20; /* Capa intermedia */
+    opacity: 0; /* Invisible inicialmente */
+    visibility: hidden; /* Oculto inicialmente */
+    transition: 0.3s; /* Animación de suavizado */
+}
+
+.sidebar-overlay.active { 
+    opacity: 1; /* Se hace visible al activarse */
+    visibility: visible; /* Se vuelve interactivo para cerrar al tocar fuera */
+}
+
+aside { 
+    position: fixed; /* Fijo en el lateral */
+    top: 0; /* Alineado arriba */
+    left: 0; /* Alineado a la izquierda */
+    width: var(--sidebar-width); /* Aplicamos el ancho reducido de 250px */
+    height: 100%; /* Todo el alto */
+    background: white; /* Fondo blanco */
+    z-index: 30; /* Por encima del fondo oscuro */
+    transform: translateX(-100%); /* Escondido a la izquierda */
+    transition: 0.3s; /* Animación de entrada */
+    display: flex; /* Flexbox para contenido */
+    flex-direction: column; /* Apilado vertical */
+}
+
+aside.active { 
+    transform: translateX(0); /* Entra en pantalla al activarse */
+}
+
+.sidebar-header { 
+    padding: 1.5rem; /* Margen interno */
+    border-bottom: 1px solid #e5e7eb; /* Línea separadora */
+    display: flex; /* Alineado horizontal */
+    justify-content: space-between; /* Separación extrema */
+    align-items: center; /* Centrado vertical */
+    font-weight: bold; /* Texto en negrita */
+}
+
+.sidebar-content { 
+    padding: 1.5rem; /* Margen interno */
+    flex: 1; /* Rellena el espacio */
+    overflow-y: auto; /* Scroll si hay muchos trabajadores */
+}
+
+.sidebar-section { 
+    margin-bottom: 2rem; /* Separación entre secciones */
+}
+
+.sidebar-title { 
+    font-size: 0.75rem; /* Tamaño pequeño */
+    text-transform: uppercase; /* Mayúsculas */
+    color: var(--text-muted); /* Color gris */
+    margin-bottom: 0.8rem; /* Separación inferior */
+    font-weight: 700; /* Negrita */
+    letter-spacing: 0.05em; /* Separación de letras */
+}
+
+.user-list-item { 
+    display: flex; /* Alineado horizontal */
+    justify-content: space-between; /* Separación extrema */
+    align-items: center; /* Centrado vertical */
+    padding: 8px 0; /* Margen vertical */
+    border-bottom: 1px solid #f3f4f6; /* Línea divisoria */
+    font-size: 0.9rem; /* Tamaño de fuente */
+}
+
+/* --- Modales --- */
+.modal-overlay { 
+    position: fixed; /* Pantalla completa fija */
+    top: 0; /* Arriba */
+    left: 0; /* Izquierda */
+    width: 100%; /* Ancho total */
+    height: 100%; /* Alto total */
+    background: rgba(0,0,0,0.5); /* Fondo oscuro transparente */
+    z-index: 50; /* Por encima de todo */
+    display: none; /* Oculto por defecto */
+    align-items: center; /* Centra modal verticalmente */
+    justify-content: center; /* Centra modal horizontalmente */
+}
+
+.modal-overlay.active { 
+    display: flex; /* Se muestra al activarse */
+}
+
+.modal-card { 
+    background: white; /* Tarjeta blanca */
+    padding: 2rem; /* Espacio interior */
+    border-radius: 12px; /* Esquinas redondeadas */
+    width: 90%; /* Ancho responsivo para móviles */
+    max-width: 500px; /* No supera los 500px */
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); /* Sombra de elevación */
+    max-height: 90vh; /* Máximo 90% del alto de pantalla */
+    overflow-y: auto; /* Permite scroll si el contenido es largo */
+}
+
+.modal-actions { 
+    display: flex; /* Alinea botones de acción */
+    justify-content: flex-end; /* Los coloca a la derecha */
+    gap: 1rem; /* Espacio entre botones */
+    margin-top: 1.5rem; /* Espacio superior */
+    border-top: 1px solid #eee; /* Línea divisoria superior */
+    padding-top: 1rem; /* Espacio tras la línea */
+}
+
+.edit-log-row { 
+    display: grid; /* Usa cuadrícula para alinear columnas exactas */
+    grid-template-columns: 80px 1fr 40px; /* Define ancho de columnas: Tipo, Input y Borrar */
+    gap: 10px; /* Espacio entre celdas */
+    align-items: center; /* Centrado vertical */
+    margin-bottom: 10px; /* Espacio entre filas */
+    padding: 8px; /* Margen interno */
+    background: #f9fafb; /* Fondo gris claro */
+    border-radius: 6px; /* Bordes redondeados */
+    border: 1px solid #eee; /* Borde sutil */
+}
+
+.edit-log-row input[type="datetime-local"] { 
+    width: 100%; /* Input ocupa su columna */
+    padding: 4px; /* Espacio interno */
+    font-size: 0.85rem; /* Fuente pequeña */
+    border: 1px solid #ddd; /* Borde gris */
+    border-radius: 4px; /* Redondeado de esquinas */
+}
+
+.map-link { 
+    text-decoration: none; /* Sin subrayado */
+    color: var(--primary-color); /* Icono o texto azul */
+    margin-left: 5px; /* Separación del texto previo */
+    display: inline-flex; /* Para alinear el emoji correctamente */
+    align-items: center; /* Centrado vertical */
+    font-size: 1rem; /* Tamaño del icono */
+}
+
+.map-link:hover { 
+    text-decoration: underline; /* Subraya al pasar el ratón */
+    color: var(--secondary-color); /* Cambia a azul oscuro */
+}
+
+/* Notificación (Toast) */
+#toast { 
+    position: fixed; /* Fijo en pantalla */
+    bottom: 20px; /* Cerca del borde inferior */
+    left: 50%; /* Centrado horizontal */
+    transform: translateX(-50%) translateY(100px); /* Centrado exacto y desplazado abajo para ocultarlo */
+    background: #333; /* Fondo oscuro */
+    color: white; /* Texto blanco */
+    padding: 12px 24px; /* Espacio interno */
+    border-radius: 8px; /* Esquinas redondeadas */
+    transition: 0.3s; /* Animación suave al subir/bajar */
+    z-index: 100; /* Encima de todo */
+    width: 90%; /* Ancho responsivo */
+    max-width: 300px; /* Ancho máximo */
+    text-align: center; /* Texto centrado */
+}
+
+#toast.show { 
+    transform: translateX(-50%) translateY(0); /* Sube a su posición visible */
+}
+
+/* Adaptación para dispositivos móviles */
+@media (max-width: 768px) {
+    aside { 
+        width: var(--sidebar-width); /* CAMBIO: En móviles respetamos los 250px fijos del escritorio */
+        max-width: 70%; /* Pero nunca dejar que ocupe más del 70% de la pantalla */
+    }
+    .clock-display { 
+        font-size: 2.5rem; /* Reloj más pequeño */
+    }
+    .date-display { 
+        font-size: 1rem; /* Fecha más pequeña */
+    }
+    .login-card { 
+        padding: 1.5rem; /* Menos espacio interior en tarjeta login */
+    }
+    .admin-header h2 { 
+        font-size: 1.5rem; /* Título de admin más pequeño */
+    }
+    .data-table th, .data-table td { 
+        padding: 10px 8px; /* Celdas más compactas */
+        font-size: 0.8rem; /* Fuente reducida */
+    }
+    .edit-log-row { 
+        grid-template-columns: 50px 1fr 30px; /* Columnas ajustadas para pantallas estrechas */
+        gap: 5px; /* Menos espacio entre columnas */
+    }
+}
+
+@media (max-width: 480px) {
+    #clock-btn { 
+        padding: 1.2rem 2rem; /* Botón de fichar ajustado */
+        font-size: 1.2rem; /* Fuente botón ajustada */
+    }
+    .header-left .app-title { 
+        font-size: 1rem; /* Título de app más pequeño */
+    }
+    .sidebar-title { 
+        font-size: 0.7rem; /* Títulos secundarios más pequeños */
+    }
+}

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Fichajes Pro v4 (Responsive)</title>
+    
+    <!-- Fuentes y Librerías Externas -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&family=Amatic+SC:wght@700&family=Caveat:wght@700&family=Dancing+Script:wght@700&family=Lobster&family=Metal+Mania&family=Yellowtail&family=Permanent+Marker&family=Piedra&family=Sriracha&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    
+    <!-- Enlace al CSS externo -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- 1. PANTALLA DE LOGIN -->
+    <div id="login-screen">
+        <div class="login-card">
+            <h2>Control de Fichajes</h2>
+            <div class="form-group">
+                <label>Usuario</label>
+                <input type="text" id="login-user" class="form-input" placeholder="Ej: admin">
+            </div>
+            <div class="form-group">
+                <label>Contraseña</label>
+                <input type="password" id="login-pass" class="form-input" placeholder="******">
+            </div>
+            <button class="btn btn-primary" style="width: 100%" onclick="app.login()">Entrar</button>
+            <div id="login-error" class="login-error">Usuario o contraseña incorrectos</div>
+        </div>
+    </div>
+
+    <!-- 2. CABECERA (HEADER) -->
+    <header id="main-header" class="hidden">
+        <div class="header-left">
+            <button id="menu-trigger" class="menu-btn hidden" onclick="ui.toggleSidebar()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            </button>
+            <div class="app-title">Mi Fichaje</div>
+        </div>
+        <div class="header-right">
+            <span class="user-info" id="current-user-name">Usuario</span>
+            <button class="logout-btn" onclick="app.logout()">(Salir)</button>
+        </div>
+    </header>
+
+    <!-- 3. BARRA LATERAL (SIDEBAR) -->
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="ui.toggleSidebar()"></div>
+    <aside id="sidebar">
+        <div class="sidebar-header">
+            <span>Panel Admin</span>
+            <button class="menu-btn" onclick="ui.toggleSidebar()">✕</button>
+        </div>
+        <div class="sidebar-content">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Gestión de Trabajadores</div>
+                <div style="display: flex; flex-direction: column; gap: 5px; margin-bottom: 1rem;">
+                    <input type="text" id="new-user-name" class="form-input" placeholder="Nombre">
+                    <input type="text" id="new-user-pass" class="form-input" placeholder="Contraseña">
+                </div>
+                <button class="btn btn-primary btn-sm" style="width: 100%" onclick="admin.addUser()">Añadir Trabajador</button>
+                <div style="margin-top: 1rem;" id="sidebar-user-list"></div>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Informes</div>
+                <button class="btn btn-success btn-sm" style="width: 100%; margin-bottom: 0.5rem;" onclick="admin.exportExcel()">📊 Descargar Excel</button>
+                <button class="btn btn-danger btn-sm" style="width: 100%;" onclick="admin.exportPDF()">📄 Descargar PDF</button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- 4. VISTA DEL TRABAJADOR -->
+    <main id="worker-view" class="hidden">
+        <div class="clock-display" id="live-clock">00:00:00</div>
+        <div class="date-display" id="live-date">...</div>
+        <button id="clock-btn" class="btn-success" onclick="worker.clockAction()">FICHAR ENTRADA</button>
+        <div class="status-badge" id="status-badge" style="background: #e5e7eb;">No fichado</div>
+    </main>
+
+    <!-- 5. PANEL DE ADMINISTRADOR -->
+    <div id="admin-panel" class="hidden">
+        <div class="admin-header">
+            <h2>Informe Global</h2>
+        </div>
+        <div class="filters">
+            <div class="filter-group">
+                <label>Filtrar por:</label>
+                <select id="filter-mode" class="form-input" onchange="ui.toggleFilterInputs()">
+                    <option value="day">Día Específico</option>
+                    <option value="month" selected>Mes Completo</option> <!-- CAMBIO: 'selected' añadido aquí -->
+                </select>
+            </div>
+            <!-- CAMBIO: Añadida clase 'hidden' al grupo de día por defecto -->
+            <div class="filter-group hidden" id="filter-day-group">
+                <label>Seleccionar Día:</label>
+                <input type="date" id="filter-date" class="form-input">
+            </div>
+            <!-- CAMBIO: Eliminada clase 'hidden' del grupo de mes por defecto -->
+            <div class="filter-group" id="filter-month-group">
+                <label>Seleccionar Mes:</label>
+                <input type="month" id="filter-month" class="form-input">
+            </div>
+            <div class="filter-group">
+                <label>Trabajador:</label>
+                <select id="filter-user" class="form-input">
+                    <option value="all">Todos</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" onclick="admin.renderTable()">🔍 Actualizar</button>
+        </div>
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Trabajador</th>
+                        <th>Fecha</th>
+                        <th>Entrada</th>
+                        <th>Salida</th>
+                        <th>Tiempo Total</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="logs-table-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 6. MODAL DE EDICIÓN DE LOGS -->
+    <div class="modal-overlay" id="edit-modal">
+        <div class="modal-card">
+            <h3>Editar Fichajes del Día</h3>
+            <p style="font-size:0.9rem; color:#666; margin-bottom:1rem;">
+                Registros de <span id="edit-user-display" style="font-weight:bold"></span>.
+            </p>
+            <div id="edit-logs-list" style="margin-bottom: 1.5rem;"></div>
+            <div class="form-group">
+                <label>Añadir nuevo registro manual:</label>
+                <div style="display:flex; gap:5px;">
+                    <input type="datetime-local" id="new-manual-time" class="form-input">
+                    <select id="new-manual-type" class="form-input" style="width:100px;">
+                        <option value="IN">Entrada</option>
+                        <option value="OUT">Salida</option>
+                    </select>
+                </div>
+                <button class="btn btn-sm btn-primary" style="margin-top:5px; width:100%;" onclick="admin.addManualLog()">Añadir Registro</button>
+            </div>
+            <div class="modal-actions">
+                <button class="btn" onclick="ui.closeModal('edit-modal')">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 7. MODAL DE EDICIÓN DE USUARIO -->
+    <div class="modal-overlay" id="edit-user-modal">
+        <div class="modal-card">
+            <h3>Editar Trabajador</h3>
+            <input type="hidden" id="edit-user-id">
+            <div class="form-group">
+                <label>Nombre (y usuario de acceso)</label>
+                <input type="text" id="edit-user-name" class="form-input" placeholder="Nuevo nombre">
+            </div>
+            <div class="form-group">
+                <label>Nueva Contraseña</label>
+                <input type="text" id="edit-user-pass" class="form-input" placeholder="Nueva contraseña">
+            </div>
+            <div class="modal-actions">
+                <button class="btn" onclick="ui.closeModal('edit-user-modal')">Cancelar</button>
+                <button class="btn btn-primary" onclick="admin.saveUserEdit()">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOTIFICACIONES (TOAST) -->
+    <div id="toast">Mensaje</div>
+
+    <!-- Enlace al JavaScript externo -->
+    <script src="script.js"></script>
+</body>
+</html>
